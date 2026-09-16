@@ -15,9 +15,10 @@ return new class extends Migration
             $table->integer('attack')->default(1);
             $table->integer('strength')->default(1);
             $table->integer('defence')->default(1);
+            $table->integer('hitpoints')->default(10);
+            $table->integer('prayer')->default(1);
             $table->integer('magic')->default(1);
             $table->integer('ranged')->default(1);
-            $table->integer('combat')->default(1);
             $table->timestamps();
         });
     }
