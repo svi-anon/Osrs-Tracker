@@ -33,9 +33,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('role:admin,moderator')
         ->name('market.update');
 
-    Route::get('/admin', [AdminController::class, 'index'])
-        ->middleware('role:admin')
-        ->name('admin.index');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])
+            ->name('admin.index');
+
+        Route::put('/admin/users/{user}/role', [AdminController::class, 'updateRole'])
+            ->name('admin.users.role');
+    });
 });
 
 Route::middleware('auth')->group(function () {
