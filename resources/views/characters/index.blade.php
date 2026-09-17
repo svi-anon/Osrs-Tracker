@@ -7,9 +7,11 @@
                     <p class="text-slate-400 mt-1">Gerencie seus chars do OSRS.</p>
                 </div>
 
-                <a href="{{ route('characters.create') }}" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
-                    Novo char
-                </a>
+                @can('create', App\Models\Character::class)
+                    <a href="{{ route('characters.create') }}" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                        Novo char
+                    </a>
+                @endcan
             </div>
 
             @if (session('success'))
@@ -24,25 +26,37 @@
                         <div>
                             <h2 class="text-xl font-bold text-white">{{ $character->name }}</h2>
                             <p class="text-slate-400">Combat {{ $character->combatLevel() }}</p>
+
+                            @if (auth()->user()->role === 'admin' || auth()->user()->role === 'moderator')
+                                <p class="text-sm text-slate-500 mt-1">
+                                    Dono: {{ $character->user->name }}
+                                </p>
+                            @endif
                         </div>
 
                         <div class="flex gap-3">
-                            <a href="{{ route('characters.show', $character) }}" class="text-blue-400 hover:text-blue-300">
-                                Ver
-                            </a>
+                            @can('view', $character)
+                                <a href="{{ route('characters.show', $character) }}" class="text-blue-400 hover:text-blue-300">
+                                    Ver
+                                </a>
+                            @endcan
 
-                            <a href="{{ route('characters.edit', $character) }}" class="text-yellow-400 hover:text-yellow-300">
-                                Editar
-                            </a>
+                            @can('update', $character)
+                                <a href="{{ route('characters.edit', $character) }}" class="text-yellow-400 hover:text-yellow-300">
+                                    Editar
+                                </a>
+                            @endcan
 
-                            <form method="POST" action="{{ route('characters.destroy', $character) }}">
-                                @csrf
-                                @method('DELETE')
+                            @can('delete', $character)
+                                <form method="POST" action="{{ route('characters.destroy', $character) }}">
+                                    @csrf
+                                    @method('DELETE')
 
-                                <button type="submit" class="text-red-400 hover:text-red-300">
-                                    Excluir
-                                </button>
-                            </form>
+                                    <button type="submit" class="text-red-400 hover:text-red-300">
+                                        Excluir
+                                    </button>
+                                </form>
+                            @endcan
                         </div>
                     </div>
                 @empty

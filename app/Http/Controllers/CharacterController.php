@@ -6,65 +6,76 @@ use App\Http\Requests\StoreCharacterRequest;
 use App\Http\Requests\UpdateCharacterRequest;
 use App\Models\Character;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CharacterController extends Controller
 {
     public function index(Request $request)
     {
-        $characters = Character::where('user_id', $request->user()->id)->get();
+        Gate::authorize('viewAny', Character::class);
+
+        if ($request->user()->role === 'admin' || $request->user()->role === 'moderator') {
+            $characters = Character::with('user')->get();
+        } else {
+            $characters = Character::where('user_id', $request->user()->id)->get();
+        }
 
         return view('characters.index', compact('characters'));
     }
 
     public function create()
     {
+        Gate::authorize('create', Character::class);
+
         return view('characters.create');
     }
 
     public function store(StoreCharacterRequest $request)
     {
+        Gate::authorize('create', Character::class);
+
         Character::create([
             'user_id' => $request->user()->id,
             ...$request->validated(),
         ]);
 
         return redirect()->route('characters.index')
-            ->with('success', 'Personagem criado com sucesso.');
+            ->with('success', 'Char criado com sucesso.');
     }
 
-    public function show(Request $request, Character $character)
+    public function show(Character $character)
     {
-        abort_unless($character->user_id === $request->user()->id, 403);
+        Gate::authorize('view', $character);
 
         $character->load('bankItems.item');
 
         return view('characters.show', compact('character'));
     }
 
-    public function edit(Request $request, Character $character)
+    public function edit(Character $character)
     {
-        abort_unless($character->user_id === $request->user()->id, 403);
+        Gate::authorize('update', $character);
 
         return view('characters.edit', compact('character'));
     }
 
     public function update(UpdateCharacterRequest $request, Character $character)
     {
-        abort_unless($character->user_id === $request->user()->id, 403);
+        Gate::authorize('update', $character);
 
         $character->update($request->validated());
 
         return redirect()->route('characters.show', $character)
-            ->with('success', 'Personagem atualizado com sucesso.');
+            ->with('success', 'Char atualizado com sucesso.');
     }
 
-    public function destroy(Request $request, Character $character)
+    public function destroy(Character $character)
     {
-        abort_unless($character->user_id === $request->user()->id, 403);
+        Gate::authorize('delete', $character);
 
         $character->delete();
 
         return redirect()->route('characters.index')
-            ->with('success', 'Personagem excluido com sucesso.');
+            ->with('success', 'Char excluido com sucesso.');
     }
 }

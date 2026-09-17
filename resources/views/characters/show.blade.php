@@ -13,9 +13,11 @@
                     <p class="text-slate-400">Combat {{ $character->combatLevel() }}</p>
                 </div>
 
-                <a href="{{ route('characters.edit', $character) }}" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
-                    Editar
-                </a>
+                @can('update', $character)
+                    <a href="{{ route('characters.edit', $character) }}" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                        Editar
+                    </a>
+                @endcan
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -41,7 +43,7 @@
                         <span>{{ number_format($bankItem->quantity) }}</span>
                     </div>
                 @empty
-                    <p class="text-slate-400">Bank vazio.</p>
+                    <p class="text-slate-400">Bank Vazio.</p>
                 @endforelse
             </div>
 
