@@ -4,7 +4,7 @@
 
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-white">OSRS Bank Tracker</h1>
-                <p class="text-slate-400 mt-1">Dashboard</p>
+                <p class="text-slate-400 mt-1">Painel</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -21,7 +21,7 @@
                                 {{ $character->name }}
                             </a>
                         @empty
-                            <p class="text-slate-500">No characters found.</p>
+                            <p class="text-slate-500">Nenhum char encontrado.</p>
                         @endforelse
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     <h2 class="text-xl font-bold text-white">All Bank</h2>
 
                     <div class="text-right">
-                        <span class="text-sm text-slate-400">Bank Value</span>
+                        <span class="text-sm text-slate-400">Valor do Bank</span>
                         <p class="text-xl font-bold text-white">
                             {{ number_format($bankValue) }} gp
                         </p>
@@ -116,8 +116,8 @@
                         <thead>
                             <tr class="border-b border-slate-800 text-left text-slate-400">
                                 <th class="py-3">Item</th>
-                                <th class="py-3">Quantity</th>
-                                <th class="py-3">Price</th>
+                                <th class="py-3">Quantidade</th>
+                                <th class="py-3">Preco</th>
                                 <th class="py-3">Total</th>
                             </tr>
                         </thead>
@@ -133,7 +133,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="py-5 text-slate-500">
-                                        Bank is empty.
+                                        O Bank esta vazio.
                                     </td>
                                 </tr>
                             @endforelse
@@ -145,7 +145,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 <div class="bg-[#0b1220] border border-slate-800 rounded-lg p-6">
-                    <h2 class="text-xl font-bold text-white mb-5">Most Valuable</h2>
+                    <h2 class="text-xl font-bold text-white mb-5">Mais valiosos</h2>
 
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($valuableItems as $item)
@@ -172,7 +172,7 @@
                 </div>
 
                 <div class="bg-[#0b1220] border border-slate-800 rounded-lg p-6">
-                    <h2 class="text-xl font-bold text-white mb-5">Popular Items</h2>
+                    <h2 class="text-xl font-bold text-white mb-5">Itens populares</h2>
 
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($popularItems as $item)

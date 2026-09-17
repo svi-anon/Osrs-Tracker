@@ -28,7 +28,11 @@ class CharacterPolicy
 
     public function update(User $user, Character $character): bool
     {
-        return $user->role === 'admin' || $user->role === 'moderator';
+        if ($user->role === 'admin' || $user->role === 'moderator') {
+            return true;
+        }
+
+        return $character->user_id === $user->id;
     }
 
     public function delete(User $user, Character $character): bool
