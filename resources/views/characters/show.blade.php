@@ -15,7 +15,7 @@
 
                 @can('update', $character)
                     <a href="{{ route('characters.edit', $character) }}" class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
-                        Editar
+                        Editar char
                     </a>
                 @endcan
             </div>
@@ -34,17 +34,87 @@
                 </div>
             </div>
 
+            <div class="bg-[#0b1220] border border-slate-800 rounded-lg p-6 mb-6">
+                <h2 class="text-xl font-bold text-white mb-4">Adicionar item ao Bank</h2>
+
+                <form method="POST" action="{{ route('bank.store', $character) }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    @csrf
+
+                    <select name="item_id" class="bg-[#111a2b] border-slate-700 rounded-md text-white">
+                        @foreach ($items as $item)
+                            <option value="{{ $item->id }}">
+                                {{ $item->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        class="bg-[#111a2b] border-slate-700 rounded-md text-white"
+                    >
+
+                    <button type="submit" class="bg-blue-700 hover:bg-blue-600 text-white rounded-md">
+                        Adicionar
+                    </button>
+                </form>
+
+                @error('item_id')
+                    <p class="text-red-400 mt-2">{{ $message }}</p>
+                @enderror
+
+                @error('quantity')
+                    <p class="text-red-400 mt-2">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="bg-[#0b1220] border border-slate-800 rounded-lg p-6">
                 <h2 class="text-xl font-bold text-white mb-4">Bank</h2>
 
-                @forelse ($character->bankItems as $bankItem)
-                    <div class="flex justify-between py-3 border-b border-slate-800">
-                        <span>{{ $bankItem->item->name }}</span>
-                        <span>{{ number_format($bankItem->quantity) }}</span>
-                    </div>
-                @empty
-                    <p class="text-slate-400">Bank Vazio.</p>
-                @endforelse
+                <div class="space-y-3">
+                    @forelse ($character->bankItems as $bankItem)
+                        <div class="bg-[#111a2b] rounded-md p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <p class="font-bold text-white">{{ $bankItem->item->name }}</p>
+                                <p class="text-sm text-slate-400">
+                                    {{ number_format($bankItem->item->price) }} gp cada
+                                </p>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <form method="POST" action="{{ route('bank.update', $bankItem) }}" class="flex gap-2">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input
+                                        type="number"
+                                        name="quantity"
+                                        value="{{ $bankItem->quantity }}"
+                                        min="1"
+                                        class="w-28 bg-[#070c16] border-slate-700 rounded-md text-white"
+                                    >
+
+                                    <button type="submit" class="text-blue-400 hover:text-blue-300">
+                                        Salvar
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="{{ route('bank.destroy', $bankItem) }}">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="text-red-400 hover:text-red-300">
+                                        Remover
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-slate-400">Bank vazio.</p>
+                    @endforelse
+                </div>
             </div>
 
             <a href="{{ route('characters.index') }}" class="inline-block mt-6 text-blue-400 hover:text-blue-300">

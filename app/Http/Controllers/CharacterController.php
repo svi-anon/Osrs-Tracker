@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCharacterRequest;
 use App\Http\Requests\UpdateCharacterRequest;
 use App\Models\Character;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -49,7 +50,9 @@ class CharacterController extends Controller
 
         $character->load('bankItems.item');
 
-        return view('characters.show', compact('character'));
+        $items = Item::orderBy('name')->get();
+
+        return view('characters.show', compact('character', 'items'));
     }
 
     public function edit(Character $character)
