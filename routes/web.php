@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BankItemController;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::delete('/bank/{bankItem}', [BankItemController::class, 'destroy'])
         ->name('bank.destroy');
+
+    Route::get('/market', [MarketController::class, 'index'])
+        ->name('market.index');
+
+    Route::post('/market/update', [MarketController::class, 'updatePrices'])
+        ->middleware('role:admin,moderator')
+        ->name('market.update');
 
     Route::get('/admin', [AdminController::class, 'index'])
         ->middleware('role:admin')
