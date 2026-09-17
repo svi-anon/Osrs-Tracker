@@ -150,8 +150,16 @@
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($valuableItems as $item)
                             <div class="bg-[#111a2b] rounded-md p-4">
-                                <div class="h-24 bg-[#070c16] rounded-md mb-3 flex items-center justify-center text-slate-600">
-                                    Item image
+                                <div class="h-24 bg-[#070c16] rounded-md mb-3 flex items-center justify-center">
+                                    @if ($item->image && file_exists(public_path($item->image)))
+                                        <img
+                                            src="{{ asset($item->image) }}"
+                                            alt="{{ $item->name }}"
+                                            class="max-h-20 max-w-20 object-contain"
+                                        >
+                                    @else
+                                        <span class="text-slate-600">Sem imagem</span>
+                                    @endif
                                 </div>
 
                                 <p class="font-bold text-white">{{ $item->name }}</p>
@@ -169,8 +177,16 @@
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($popularItems as $item)
                             <div class="bg-[#111a2b] rounded-md p-4">
-                                <div class="h-24 bg-[#070c16] rounded-md mb-3 flex items-center justify-center text-slate-600">
-                                    Item image
+                                <div class="h-24 bg-[#070c16] rounded-md mb-3 flex items-center justify-center">
+                                    @if ($item->image && file_exists(public_path($item->image)))
+                                        <img
+                                            src="{{ asset($item->image) }}"
+                                            alt="{{ $item->name }}"
+                                            class="max-h-20 max-w-20 object-contain"
+                                        >
+                                    @else
+                                        <span class="text-slate-600">Sem imagem</span>
+                                    @endif
                                 </div>
 
                                 <p class="font-bold text-white">{{ $item->name }}</p>
